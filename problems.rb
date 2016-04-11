@@ -221,9 +221,128 @@ end
 #     "0.25"
 
 def counting(arr)
-  result = {positive: 0, negative: 0, zero: 0}
+  result = { positive: 0, negative: 0, zero: 0 }
   arr.each do |e|
-    e > 0 ? result[:positive] += 1 : e < 0 ? result[:negative] += 1 : result[:zero] += 1
+    if e > 0
+      result[:positive] += 1
+    elsif e < 0
+      result[:negative] += 1
+    else
+      result[:zero] += 1
+    end
   end
-  result.each {|p, v|puts "#{p} : #{(v/arr.length).to_f}" }
+  result.each { |p, v| puts "#{p} : #{v.to_f / arr.count}" }
+end
+
+# - Given a string, write a function to return an
+# object that states how many times
+# each letter is present.
+# =>  Input: "Lorem Ipsum dolor Sit amet Consectetur adipisicing Elit"
+#     Output:{"l": 3, "o": 4, "r": 3, .......}
+
+def countletter(sentence)
+  result = {}
+  sentence.downcase.each_char do |e|
+    if result[e]
+      result[e] += 1
+    else
+      result[e] = 1
+    end
+  end
+  puts result
+end
+
+# - Given a non-negative int n, return the sum of
+# its digits recursively (no loops).
+# Note: modulus (%) by 10 yields the rightmost digit
+# (126 % 10 is 6), while divide (/) by 10 removes the
+#  rightmost digit (Math.floor(126/10) is 12).
+# =>  Input: 123
+#     Output:6
+#     Input: 456
+#     Output: 15
+
+def numsum(n)
+  result = 0
+  while n >= 1
+    digit = (n % 10).floor
+    result += digit
+    (n /= 10).floor
+  end
+  puts result
+end
+
+# - Write a function that takes a number as input and
+#  prints the number in words. (Assume that the input
+#   is in the range 1 to 999,999,999; both inclusive)
+# => print_number(235)
+
+def printword(digit)
+  ones = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
+  tens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+  tenones = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen','seventeen', 'eighteen', 'nineteen']
+  if digit < 10
+    return ones[digit]
+  elsif digit < 20
+    onesplace = digit % 10
+    return tenones[onesplace]
+  elsif digit < 100
+    tensdigit = (digit / 10).floor
+    onesdigit = digit % 10
+    return "#{tens[tensdigit - 2]} #{ones[onesdigit]}"
+  elsif digit < 1_000
+    hunddigit = (digit / 100).floor
+    hundremainder = digit % 100
+    return "#{printword(hunddigit)} hundred #{printword(hundremainder)}"
+  elsif digit < 1_000_000
+    thoudigit = (digit / 1000).floor
+    thouremainder = digit % 1000
+    return "#{printword(thoudigit)} thousand #{printword(thouremainder)}"
+  elsif digit < 1_000_000_000
+    milldigit = (digit / 1_000_000).floor
+    millremainder = digit % 1_000_000
+    return "#{printword(milldigit)} million #{printword(millremainder)}"
+  elsif digit < 1_000_000_000_000
+    billdigit = (digit / 1_000_000_000).floor
+    billremainder = digit % 1_000_000
+    return "#{printword(billdigit)} billion #{printword(billremainder)}"
+  end
+end
+
+# Given a positive integer n, write a function to check
+#  whether the number is prime or not.
+# =>  Input: 78
+#     Output: "False"
+#     Input: 37
+#     Output: "True"
+
+def isprime(n)
+  if n == 1
+    return false
+  elsif n == 2
+    return true
+  else
+    (2..Math.sqrt(n).ceil).each { |e| n % e == 0 ? (return false) : next }
+    return true
+  end
+end
+
+# Given three positive integers, write a function
+# to check whether these three numbers
+# can be used to form a triangle or not.
+# =>  Input: 3, 4, 5
+#     Output: "True"
+#     Input: 1, 1, 2
+#     Output: "False"
+
+def checktriangle(a, b, c)
+  if a + b <= c
+    return false
+  elsif b + c <= a
+    return false
+  elsif c + a <= b
+    return false
+  else
+    return true
+  end
 end
