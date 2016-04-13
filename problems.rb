@@ -66,7 +66,15 @@ end
 # 7 print next 100 leap years
 
 def leapyear(n)
-
+  start = (n % 100 != 0 && n % 4 == 0) || (n % 100 == 0 && n % 400 == 0) ? n : n + (4 - (n % 4))
+  (0...100).step(4).each do |e|
+    year = start + e
+    if year % 100 != 0
+      puts year
+    elsif year % 400 == 0
+      puts year
+    end
+  end
 end
 
 # 8
@@ -295,7 +303,7 @@ def printword(digit)
     hundremainder = digit % 100
     return "#{printword(hunddigit)} hundred #{printword(hundremainder)}"
   elsif digit < 1_000_000
-    thoudigit = (digit / 1000).floor
+    thoudigit = (digit / 1000).floorx
     thouremainder = digit % 1000
     return "#{printword(thoudigit)} thousand #{printword(thouremainder)}"
   elsif digit < 1_000_000_000
@@ -346,3 +354,63 @@ def checktriangle(a, b, c)
     return true
   end
 end
+
+# - Using the above function to find n!, write a function that
+# takes two numbers, n & r as input and returns nCr.
+# Note: nCr = n!/(((n-r)!)*(r!))
+# =>  Input:  10, 5
+#     Output: 252
+#     Input: 21, 7
+#     Output: 116280
+def ncr(n, r)
+  factorial = lambda do |e|
+    e == 1 ? (return 1) : (return e * factorial.call(e - 1))
+  end
+  puts factorial.call(n) / (factorial.call(n - r) * factorial.call(r))
+end
+
+
+# - Given the square grid below and a number k (0 < k <= n),
+# find the sum of numbers whose, x or y coordinate is equal to k.
+# Explanation: It is the sum of 13, 18, 23, 28 and 33 from column 3,
+#  with that of
+# =>  Input: "11 12 13 14 15\n16 17 18 19 20\n21 22 23 24 25\n26 27 28 29 30\n
+# 31 32 33 34 35"
+#     k = 3
+#     Output: 207
+# 21, 22, 24, 25 from row 3.
+# Note: 23 not counted while counting along the rows since it was already
+# counted
+# in the columns.
+
+def gridtotal(grid, k)
+  colsum = 0
+  grid = grid.split("\n").map { |e| e.split(' ').map { |f| f.to_i } }
+  rowtotal = grid[k - 1].reduce { |sum, num| sum + num }
+  (0...grid.length).each { |n| colsum += grid[n][k - 1] unless n == k - 1 }
+  puts colsum + rowtotal
+end
+
+# - Given the string pyramid below, find its sum.
+# =>  Input: "1\n1 1\n1 2 1\n1 3 3 1\n1 4 6 4 1\n1 5 10 10 5 1\n1 6 15 20 15 6 1"
+#     Output: 127
+
+def pyramid(grid)
+  puts grid.split("\n").map { |e| e.split(' ').map { |f| f.to_i } }.flatten.reduce { | sum, num | sum + num }
+end
+
+# pyramid("1\n1 1\n1 2 1\n1 3 3 1\n1 4 6 4 1\n1 5 10 10 5 1\n1 6 15 20 15 6 1")
+
+
+def longest_call(call_log)
+  call_obj = call_log.split(",").map { |e| e.split(" ") }.to_h
+  call_obj.update(call_obj) do | key, value |
+    timearr = value.split(':').map { |n| n.to_i }
+    value = timearr[0]*60*60 + timearr[1]*60 + timearr[2]
+  end
+  call_obj.max_by{|k,v| v}[0]
+end
+# call_obj.each do |key, value|
+#   timearr = value.split(':').map { |n| n.to_i }
+#   puts timearr[0]*60 + timearr[1]*60 + timearr[2]
+# end
