@@ -401,6 +401,11 @@ end
 
 # pyramid("1\n1 1\n1 2 1\n1 3 3 1\n1 4 6 4 1\n1 5 10 10 5 1\n1 6 15 20 15 6 1")
 
+# - Given a string that contains data about the calls you made last month
+#  and the time you spoke in each call, return the telephone number
+#  of the person you spoke to the longest.
+# =>  Input: "9876543210 01:25:50,9836479923 01:30:45,8945671230 01:15:00,9876543210 00:07:30,8975638902 00:50:32"
+#     Output: "9876543210"
 
 def longest_call(call_log)
   call_obj = call_log.split(",").map { |e| e.split(" ") }.to_h
@@ -410,7 +415,48 @@ def longest_call(call_log)
   end
   call_obj.max_by{|k,v| v}[0]
 end
-# call_obj.each do |key, value|
-#   timearr = value.split(':').map { |n| n.to_i }
-#   puts timearr[0]*60 + timearr[1]*60 + timearr[2]
-# end
+
+
+# - Find all pairs in array of integers whose sum is equal to given number?
+# =>Input: sum = 8
+#   [1, 4, 3, 5, 4, 6, 7, 8, 3]
+#   Output:
+#   "1, 7"
+#   "4, 4"
+#   "3, 5"
+#   "5, 3"
+
+def find_pairs(arr, sum)
+  arr.combination(2).find_all { |x, y| x + y == sum }
+end
+
+# - Write a guessing game where the user has to guess a secret number
+# with a range of 1 to 100. After every guess, the program tells the user
+#  whether their number was too large or too small. At the end, the number
+#   of tries should be printed. If they input the same number multiple times
+#    consecutively,count it as one try."
+
+def guessgame
+  prev_guess = 0
+  comp_guess = ((rand * 100) + 1).floor
+  attempts = 10
+  while attempts >= 1
+    print "Guess the number : "
+    user_guess = gets.chomp.to_i
+    if user_guess != prev_guess
+      if user_guess > comp_guess
+        puts 'Guess was higher'
+      elsif user_guess < comp_guess
+        puts "Guess was lower"
+      else
+        puts "You are correct, the answer is #{comp_guess} indeed!"
+        break
+      end
+      attempts -= 1
+      prev_guess = user_guess
+    else
+      puts "Guess was same as last attempt, try a different number"
+    end
+    puts "You have #{attempts} attempts left"
+  end
+end
